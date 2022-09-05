@@ -119,8 +119,8 @@ class PembayaranController extends CI_Controller
 
         // $signature = $init->createSignature();
 
-        // $init->setMethod('BRIVAOP');
-        $init->setMethod($this->input->get('method'));
+        $init->setMethod('BRIVAOP');
+        // $init->setMethod($this->input->get('method'));
 
         $transaction = $init->openTransaction();
         $transaction->setPayload([
