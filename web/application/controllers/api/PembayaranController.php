@@ -26,6 +26,7 @@ class PembayaranController extends CI_Controller
         );
     }
 
+    // untuk close payment
     public function index()
     {
         $merchantRef = 'INVOICE-' . (int)preg_replace('/(0)\.(\d+) (\d+)/', '$3$1$2', microtime()); //your merchant reference
@@ -110,9 +111,10 @@ class PembayaranController extends CI_Controller
         }
     }
 
+    // untuk open payment
     public function bayar()
     {
-        $merchantRef = 'DONASICEPOT-' . (int)preg_replace('/(0)\.(\d+) (\d+)/', '$3$1$2', microtime());
+        $merchantRef = 'DONASI-CEPOT-' . (int)preg_replace('/(0)\.(\d+) (\d+)/', '$3$1$2', microtime());
         $init = $this->tripay->initTransaction($merchantRef);
 
         // $init->setMethod('BRIVAOP');
@@ -126,9 +128,49 @@ class PembayaranController extends CI_Controller
             'signature'         => $init->createSignature()
         ]);
 
-        return $this->output->set_content_type('application/json')
-            ->set_status_header(200)
-            ->set_output(json_encode($transaction->getData()));
+        // return $this->output->set_content_type('application/json')
+        //     ->set_status_header(200)
+        //     ->set_output(json_encode($transaction->getData()));
+        $result = $transaction->getData();
+
+        $transaksi = [
+            'uuid' => $result->uuid,
+            'merchant_ref' => $result->merchant_ref,
+            'customer_name' => $result->customer_name,
+            'payment_name' => $result->payment_name,
+            'payment_method' => $result->payment_method,
+            'pay_code' => $result->pay_code,
+            'qr_string' => $result->qr_string,
+            'qr_url' => $result->qr_url,
+            'status' => 'PENDING',
+        ];
+        $insert = $this->db->insert('transaksi', $transaksi);
+        $id_pembayaran = $this->db->insert_id();
+
+        $detail_transaksi = [
+            'id_pembayaran' => $id_pembayaran,
+            'deskripsi' => $this->input->get('nama'),
+            'kode_campaign' => $this->input->get('kode'),
+            'nominal' => $this->input->get('nominal'),
+        ];
+        $this->db->insert('detail_transaksi', $detail_transaksi);
+
+        if ($insert) {
+            $this->db->delete('keranjang', array('id' => $this->input->get('idkeranjang')));
+            return $this->output->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode([
+                    'status' => 'success',
+                    'message' => 'Pembayaran berhasil, silahkan klick ok',
+                ]));
+        } else {
+            return $this->output->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'message' => 'Pembayaran gagal'
+                ]));
+        }
     }
 
     public function callback()
@@ -141,10 +183,11 @@ class PembayaranController extends CI_Controller
                     'message' => 'Akses dilarang'
                 ]));
         }
+        
         $init = $this->tripay->initCallback();
         $result = $init->getJson();
 
-        $cek_pembayaran = $this->db->get_where('pembayaran', ['referensi' => $result->reference]);
+        $cek_pembayaran = $this->db->get_where('transaksi', ['merchant_ref' => $result->merchant_ref]);
         if ($cek_pembayaran->num_rows() > 0) {
             if ($result->status == "PAID") {
                 $status_bayar = "PAID";
@@ -152,8 +195,8 @@ class PembayaranController extends CI_Controller
                 $status_bayar = $result->status;
             }
 
-            $this->db->where('referensi', $result->reference);
-            $this->db->update('pembayaran', ['status_bayar' => $status_bayar]);
+            $this->db->where('merchant_ref', $result->merchant_ref);
+            $this->db->update('transaksi', ['status' => $status_bayar]);
 
             if ($this->db->error()) {
                 return $this->output->set_content_type('application/json')
