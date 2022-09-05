@@ -18,9 +18,9 @@ class KeranjangController extends CI_Controller
         $this->load->helper('url');
 
         $this->tripay =  new Main(
-            'DEV-Ufpae9mhYWWMorW93KY7QcMHgRajhw1nJktq9Fe6',
-            'MGrGi-LVeBW-xLdyK-yKzoF-ZY8HI',
-            'T14877',
+            'DEV-Gc30i3eLwu8wwZdWesT95oLa9WyUg0fpV91x6hYg',
+            'RIvzj-toTLs-XwNnU-ZNK5o-YJiJb',
+            'T14659',
             'sandbox'
         );
     }
