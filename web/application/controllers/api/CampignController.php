@@ -16,9 +16,9 @@ class CampignController extends CI_Controller
 
     public function index()
     {
-        $this->db->select('*');
-        $this->db->from('campign');
-        $campign = $this->db->get();
+        // $this->db->select('*');
+        // $this->db->from('campign');
+        $campign = $this->db->get('campign');
 
         if ($campign->num_rows() > 0) {
             header('Content-Type: application/json');
