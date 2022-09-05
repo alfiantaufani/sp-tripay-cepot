@@ -1,0 +1,61 @@
+<template>
+    <div class="page page-home" style="overflow: scroll;">
+        <div class="navbar no-shadow" style="color: white">
+            <div class="navbar-bg" style="background-color: #00CCFF; height: 55px; border-top-left-radius: 15px;
+            border-top-right-radius: 15px;"></div>
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" class="link back" style="color: white">
+                        <i class="icon icon-back"></i>
+                    </a>
+                </div>
+                <div class="title" style="margin-left: 5px">Detail Donasi</div>
+            </div>
+        </div>
+        <form method="post" action="#" id="bayar_donasi">
+            <input type="text" name="donasi_name" id="donasi_name"/>
+            <input type="text" name="donasi_code" id="donasi_code"/>
+
+            <div class="page-content" id="detail_cpg">
+
+            </div>
+
+            <div class="block-title">
+                <button type="submit" class="button button-large button-fill bg">Donasi</button>
+            </div>
+        </form>
+    </div>
+</template>
+<script>
+    export default (props, ctx) => {
+        var $on = ctx.$on;
+        $on("pageInit", () => {
+            $("#bayar_donasi").submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'GET',
+                    url: url + "api/pembayaran/bayar",
+                    data: {
+                        nama: $('#donasi_name').val(),
+                        method: $('input[name=method_donasi]:checked').val(),
+                        kode: $('#donasi_code').val(),
+                    },
+                    cache: false,
+                    beforeSend: function () {
+                        app.dialog.progress("Loading...");
+                    },
+                    success: (response) => {
+                        app.dialog.close();
+                        app.dialog.alert(response.message, "Sukses", function () {
+                            app.views.main.router.navigate("/riwayat/");
+                        });
+                    },
+                    error: (response) => {
+                        app.dialog.alert(response.responseJSON.message, "Gagal")
+                    }
+                })
+            });
+        });
+        return $render;
+    };
+</script>

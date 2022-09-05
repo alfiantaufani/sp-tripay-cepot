@@ -48,9 +48,9 @@
             $.ajax({
                 url: url + "api/riwayat-pembayaran",
                 method: "GET",
-                data: {
-                    id_registrasi: localStorage.getItem("id_registrasi")
-                },
+                // data: {
+                //     id_registrasi: localStorage.getItem("id_registrasi")
+                // },
                 cache: "false",
                 beforeSend: function () {
                     app.dialog.progress("Loading...");
@@ -60,18 +60,19 @@
                     let status_proses = "";
                     var selesai = "";
                     $.each(data.data, function (index, item) {
-                        if (item.status_bayar == 'UNPAID' || item.status_bayar == 'REFUND' || item.status_bayar == 'EXPIRED' || item.status_bayar == 'FAILED') {
+                        console.log(item)
+                        if (item.status == 'UNPAID' || item.status == 'REFUND' || item.status == 'EXPIRED' || item.status == 'FAILED') {
                             status_proses += `
                             <li>
-                                <a href="#" data-url="`+item.checkout_url+`" onclick="cek_out(this)" class="item-link item-content">
+                                <a href="#" data-url="`+item.qr_url+`" onclick="cek_out(this)" class="item-link item-content">
                                     <div class="item-inner">
                                         <div class="item-title">
                                             `+ item.deskripsi + ` - Rp.` + formatRupiah(item.nominal) + `
-                                            <div class="item-header">`+ item.tgl_checkout + `</div>
+                                            <div class="item-header">`+ item.created_at + `</div>
                                         </div>
                                         <div class="item-after">
                                             <div class="chip color-red">
-                                                <div class="chip-label">`+ item.status_bayar + `</div>
+                                                <div class="chip-label">`+ item.status + `</div>
                                             </div>
                                         </div>
                                     </div>
@@ -81,15 +82,15 @@
                         }else{
                             selesai += `
                             <li>
-                                <a href="#" data-url="`+item.checkout_url+`" onclick="cek_out(this)" class="item-link item-content">
+                                <a href="#" data-url="`+item.qr_url+`" onclick="cek_out(this)" class="item-link item-content">
                                     <div class="item-inner">
                                         <div class="item-title">
                                             `+ item.deskripsi + ` - Rp.` + formatRupiah(item.nominal) + `
-                                            <div class="item-header">`+ item.tgl_checkout + `</div>
+                                            <div class="item-header">`+ item.created_at + `</div>
                                         </div>
                                         <div class="item-after">
                                             <div class="chip color-green">
-                                                <div class="chip-label">`+ item.status_bayar + `</div>
+                                                <div class="chip-label">`+ item.status + `</div>
                                             </div>
                                         </div>
                                     </div>

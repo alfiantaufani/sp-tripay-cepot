@@ -33,7 +33,7 @@ var app = new Framework7({
   },
 });
 
-var url = "https://tripay.desakedungotok.com/web/";
+var url = "https://tripay.desapesantren.com/web/";
 
 function formatRupiah(angka) {
   var reverse = angka.toString().split('').reverse().join(''),
