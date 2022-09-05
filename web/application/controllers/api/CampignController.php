@@ -20,7 +20,7 @@ class CampignController extends CI_Controller
         // $this->db->from('campign');
         $campign = $this->db->get('campign');
 
-        if ($campign->num_rows() > 0) {
+        if ($campign) {
             header('Content-Type: application/json');
             echo json_encode([
                 'status' => 'success',
