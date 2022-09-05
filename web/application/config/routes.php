@@ -10,6 +10,8 @@ $route['api/profil'] = 'api/ProfilController';
 
 $route['api/tagihan'] = 'api/TagihanController';
 
+$route['api/campign'] = 'api/CampignController';
+
 $route['api/keranjang'] = 'api/KeranjangController';
 $route['api/keranjang/store'] = 'api/KeranjangController/store';
 $route['api/keranjang/destroy'] = 'api/KeranjangController/destroy';
