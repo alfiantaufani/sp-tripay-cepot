@@ -18,7 +18,7 @@ class CampignController extends CI_Controller
     {
         // $this->db->select('*');
         // $this->db->from('campign');
-        $campign = $this->db->get('campign');
+        $campign = $this->db->get('campaign');
 
         if ($campign) {
             header('Content-Type: application/json');
