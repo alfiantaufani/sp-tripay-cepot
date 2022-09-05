@@ -19,10 +19,10 @@ class PembayaranController extends CI_Controller
         $this->load->helper('url');
 
         $this->tripay =  new Main(
-            'DEV-Gc30i3eLwu8wwZdWesT95oLa9WyUg0fpV91x6hYg',
-            'RIvzj-toTLs-XwNnU-ZNK5o-YJiJb',
-            'T14659',
-            'sandbox'
+            'xvYjCuHif6GP6J7OTUqrQXgs4xd7kTfMTPXippgO',
+            'Fj910-6NDuf-AgHVH-MjGBY-4HYnd',
+            'T15053',
+            // 'sandbox'
         );
     }
 
