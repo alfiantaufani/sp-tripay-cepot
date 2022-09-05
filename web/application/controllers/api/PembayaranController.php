@@ -19,9 +19,9 @@ class PembayaranController extends CI_Controller
         $this->load->helper('url');
 
         $this->tripay =  new Main(
-            'DEV-Ufpae9mhYWWMorW93KY7QcMHgRajhw1nJktq9Fe6',
-            'MGrGi-LVeBW-xLdyK-yKzoF-ZY8HI',
-            'T14877',
+            'DEV-Gc30i3eLwu8wwZdWesT95oLa9WyUg0fpV91x6hYg',
+            'RIvzj-toTLs-XwNnU-ZNK5o-YJiJb',
+            'T14659',
             'sandbox'
         );
     }
@@ -90,7 +90,7 @@ class PembayaranController extends CI_Controller
         ];
         $this->db->insert('detail_transaksi', $detail_transaksi);
 
-        
+
         if ($insert) {
             $this->db->delete('keranjang', array('id' => $this->input->get('idkeranjang')));
             return $this->output->set_content_type('application/json')
@@ -108,6 +108,27 @@ class PembayaranController extends CI_Controller
                     'message' => 'Pembayaran gagal'
                 ]));
         }
+    }
+
+    public function bayar()
+    {
+        $merchantRef = 'DONASICEPOT-' . (int)preg_replace('/(0)\.(\d+) (\d+)/', '$3$1$2', microtime());
+        $init = $this->tripay->initTransaction($merchantRef);
+
+        // $init->setMethod('BRIVAOP');
+        $init->setMethod($this->input->get('method'));
+        $transaction = $init->openTransaction();
+
+        $transaction->setPayload([
+            'method'            => $init->getMethod(),
+            'merchant_ref'      => $merchantRef,
+            'customer_name'     => $this->input->get('nama'),
+            'signature'         => $init->createSignature()
+        ]);
+
+        return $this->output->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($transaction->getData()));
     }
 
     public function callback()

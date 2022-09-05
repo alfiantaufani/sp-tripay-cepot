@@ -34,4 +34,23 @@ class CampignController extends CI_Controller
             ]);
         }
     }
+
+    public function detail()
+    {
+        $campign = $this->db->get_where('campaign', ['kode' => $this->input->get('kode')]);
+
+        if ($campign) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'success',
+                'data' => $campign->row()
+            ]);
+        } else {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Data tidak tersedia'
+            ]);
+        }
+    }
 }
