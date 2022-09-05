@@ -93,15 +93,15 @@
                                         </div>
                                         <div class="item-inner">
                                             <div class="item-title-row">
-                                                <div class="item-title"><a href="javascript:void(0)" data-id="`+item.kode+`" onclick="detail_campign(this)">`+item.judul+`</a></div>
+                                                <div class="item-title"><a href="javascript:void(0)" data-id="`+ item.kode + `" onclick="detail_campign(this)">` + item.judul + `</a></div>
                                             </div>
-                                            <div class="item-subtitle"><b>Rp. `+formatRupiah(item.target_sumbangan)+`</b></div>
+                                            <div class="item-subtitle"><b>Rp. `+ formatRupiah(item.target_sumbangan) + `</b></div>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="card-footer"> <span>`+item.tgl_akhir+`</span><span></span></div>
+                        <div class="card-footer"> <span>`+ item.tgl_akhir + `</span><span></span></div>
                     </div>
                     `;
                 });
@@ -112,69 +112,91 @@
         function detail_campign(el) {
             var detail_campign = "";
             app.views.main.router.navigate("/detail_campign/");
-            $.getJSON(url + "api/campign/detail", { kode: $(el).data('id') }, function (data) {
-                detail_campign += `
-                <div class="card demo-card-header-pic">
-                    <div style="background-image:url(https://cdn.framework7.io/placeholder/nature-1000x600-3.jpg)"
-                        class="card-header align-items-flex-end">`+data.data.judul+` <br> <b>Rp.`+formatRupiah(data.data.target_sumbangan)+`</b></div>
-                    <div class="card-content card-content-padding">
-                        <p class="date">Deskripsi</p>
-                        <p>`+data.data.deskripsi+`</p>
-                        <p class="date">Tanggal Akhir</p>
-                        <p>`+data.data.tgl_akhir+`</p>
-                    </div>
-                    <div class="card-footer row">                        
-                    </div>
-                </div>
-                `;
 
-                detail_campign += `
-                <div class="block-title">Pilih Pembayaran</div>
-                    <div class="list accordion-list">
-                        <ul>`;
-                            $.each(data.methode, function (index, pay) {
-                                detail_campign += `
-                                <li class="accordion-item"><a class="item-content item-link" href="#">
-                                    <div class="item-inner">
-                                        <div class="item-title">`+ pay.group_name + `</div>
-                                    </div>
-                                    </a>
-                                    <div class="accordion-item-content">
-                                        <div class="block">
-                                            <div class="row" style="margin-top:5px; margin-bottom:5px">`;
-                                            $.each(pay.payment, function (index, payment) {
-                                                detail_campign += `
-                                                <div class="option">
-                                                    <input type="radio" name="method_donasi" id="`+ payment.code + `" value="` + payment.code + `">
-                                                    <label for="`+ payment.code + `" aria-label="` + payment.code + `">
-                                                        <span></span>
-                                                        `+ payment.name + `
-                                                        <div class="">
-                                                            <small>Rp.`+ formatRupiah(payment.fee.flat) + `</small>
-                                                        </div>
-                                                    </label>
-                                                </div>`;
-                                            })
-                                detail_campign += `
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>`;
-                            });
-
-                detail_campign += `    
-                            </ul>
+            $.ajax({
+                url: url + "api/campign/detail",
+                method: "GET",
+                data: {
+                    kode: $(el).data('id'),
+                },
+                cache: "false",
+                beforeSend: function () {
+                    app.dialog.progress("Loading...");
+                },
+                success: function (data) {
+                    app.dialog.close();
+                    $('.donasi').show();
+                    detail_campign += `
+                    <div class="card demo-card-header-pic">
+                        <div style="background-image:url(https://cdn.framework7.io/placeholder/nature-1000x600-3.jpg)"
+                            class="card-header align-items-flex-end">`+ data.data.judul + ` <br> <b>Rp.` + formatRupiah(data.data.target_sumbangan) + `</b></div>
+                        <div class="card-content card-content-padding">
+                            <p class="date">Deskripsi</p>
+                            <p>`+ data.data.deskripsi + `</p>
+                            <p class="date">Tanggal Akhir</p>
+                            <p>`+ data.data.tgl_akhir + `</p>
+                        </div>
+                        <div class="card-footer row">                        
                         </div>
                     </div>
-                `;
-                
-                $('#donasi_name').val(localStorage.getItem("nama"));
-                $('#donasi_code').val(data.data.kode);
-                $('#detail_cpg').html(detail_campign);
+                    `;
+
+                    detail_campign += `
+                    <div class="block-title">Pilih Pembayaran</div>
+                        <div class="list accordion-list">
+                            <ul>`;
+                    $.each(data.methode, function (index, pay) {
+                        detail_campign += `
+                                    <li class="accordion-item"><a class="item-content item-link" href="#">
+                                        <div class="item-inner">
+                                            <div class="item-title">`+ pay.group_name + `</div>
+                                        </div>
+                                        </a>
+                                        <div class="accordion-item-content">
+                                            <div class="block">
+                                                <div class="row" style="margin-top:5px; margin-bottom:5px">`;
+                        $.each(pay.payment, function (index, payment) {
+                            detail_campign += `
+                                                    <div class="option">
+                                                        <input type="radio" name="method_donasi" id="`+ payment.code + `" value="` + payment.code + `">
+                                                        <label for="`+ payment.code + `" aria-label="` + payment.code + `">
+                                                            <span></span>
+                                                            `+ payment.name + `
+                                                            <div class="">
+                                                                <small>Rp.`+ formatRupiah(payment.fee.flat) + `</small>
+                                                            </div>
+                                                        </label>
+                                                    </div>`;
+                        })
+                        detail_campign += `
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>`;
+                    });
+
+                    detail_campign += `    
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+
+                    $('#donasi_name').val(localStorage.getItem("nama"));
+                    $('#donasi_code').val(data.data.kode);
+                    $('#detail_cpg').html(detail_campign);
+                },
+                error: function (response) {
+                    app.dialog.close();
+                    app.dialog.alert('Data gagal dimuat', "Error")
+                }
+            });
+
+            $.getJSON(url + "api/campign/detail", { kode: $(el).data('id') }, function (data) {
+
             });
         }
 
-        
+
 
         function logout() {
             app.dialog.confirm("Apakah ingin keluar?", "Peringatan", function () {
@@ -237,7 +259,8 @@
         }
 
         function cek_out(el) {
-            location.replace($(el).data('url'));
+            // location.replace($(el).data('url'));
+            app.dialog.alert("Kode pembayaran : " + $(el).data('code'), "Informasi");
         }
     </script>
 </body>
