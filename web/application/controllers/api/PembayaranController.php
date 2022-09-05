@@ -117,6 +117,8 @@ class PembayaranController extends CI_Controller
         $merchantRef = 'DONASI-CEPOT-' . (int)preg_replace('/(0)\.(\d+) (\d+)/', '$3$1$2', microtime());
         $init = $this->tripay->initTransaction($merchantRef);
 
+        $signature = $init->createSignature();
+
         // $init->setMethod('BRIVAOP');
         $init->setMethod($this->input->get('method'));
         $transaction = $init->openTransaction();
