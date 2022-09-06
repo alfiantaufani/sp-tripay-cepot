@@ -21,7 +21,7 @@ class CampignController extends CI_Controller
             'xvYjCuHif6GP6J7OTUqrQXgs4xd7kTfMTPXippgO',
             'Fj910-6NDuf-AgHVH-MjGBY-4HYnd',
             'T15053',
-            // 'sanbox'
+            'live'
         );
     }
 

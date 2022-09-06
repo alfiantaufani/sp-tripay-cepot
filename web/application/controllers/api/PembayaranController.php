@@ -22,7 +22,7 @@ class PembayaranController extends CI_Controller
             'xvYjCuHif6GP6J7OTUqrQXgs4xd7kTfMTPXippgO',
             'Fj910-6NDuf-AgHVH-MjGBY-4HYnd',
             'T15053',
-            // 'sandbox'
+            'live'
         );
     }
 
@@ -130,49 +130,49 @@ class PembayaranController extends CI_Controller
             'signature'         => $init->createSignature()
         ]);
 
-        return $this->output->set_content_type('application/json')
-            ->set_status_header(200)
-            ->set_output(json_encode($transaction->getData()));
-        // $result = $transaction->getData();
+        // return $this->output->set_content_type('application/json')
+        //     ->set_status_header(200)
+        //     ->set_output(json_encode($transaction->getData()));
+        $result = $transaction->getData();
 
-        // $transaksi = [
-        //     'uuid' => $result->uuid,
-        //     'merchant_ref' => $result->merchant_ref,
-        //     'customer_name' => $result->customer_name,
-        //     'payment_name' => $result->payment_name,
-        //     'payment_method' => $result->payment_method,
-        //     'pay_code' => $result->pay_code,
-        //     'qr_string' => $result->qr_string,
-        //     'qr_url' => $result->qr_url,
-        //     'status' => 'PENDING',
-        // ];
-        // $insert = $this->db->insert('transaksi', $transaksi);
-        // $id_pembayaran = $this->db->insert_id();
+        $transaksi = [
+            'uuid' => $result->uuid,
+            'merchant_ref' => $result->merchant_ref,
+            'customer_name' => $result->customer_name,
+            'payment_name' => $result->payment_name,
+            'payment_method' => $result->payment_method,
+            'pay_code' => $result->pay_code,
+            'qr_string' => $result->qr_string,
+            'qr_url' => $result->qr_url,
+            'status' => 'PENDING',
+        ];
+        $insert = $this->db->insert('transaksi', $transaksi);
+        $id_pembayaran = $this->db->insert_id();
 
-        // $detail_transaksi = [
-        //     'id_pembayaran' => $id_pembayaran,
-        //     'deskripsi' => $this->input->get('nama'),
-        //     'kode_campaign' => $this->input->get('kode'),
-        //     'nominal' => $this->input->get('nominal'),
-        // ];
-        // $this->db->insert('detail_transaksi', $detail_transaksi);
+        $detail_transaksi = [
+            'id_pembayaran' => $id_pembayaran,
+            'deskripsi' => $this->input->get('nama'),
+            'kode_campaign' => $this->input->get('kode'),
+            'nominal' => $this->input->get('nominal'),
+        ];
+        $this->db->insert('detail_transaksi', $detail_transaksi);
 
-        // if ($insert) {
-        //     $this->db->delete('keranjang', array('id' => $this->input->get('idkeranjang')));
-        //     return $this->output->set_content_type('application/json')
-        //         ->set_status_header(200)
-        //         ->set_output(json_encode([
-        //             'status' => 'success',
-        //             'message' => 'Pembayaran berhasil, silahkan klick ok',
-        //         ]));
-        // } else {
-        //     return $this->output->set_content_type('application/json')
-        //         ->set_status_header(500)
-        //         ->set_output(json_encode([
-        //             'status' => 'error',
-        //             'message' => 'Pembayaran gagal'
-        //         ]));
-        // }
+        if ($insert) {
+            $this->db->delete('keranjang', array('id' => $this->input->get('idkeranjang')));
+            return $this->output->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode([
+                    'status' => 'success',
+                    'message' => 'Pembayaran berhasil, silahkan klick ok',
+                ]));
+        } else {
+            return $this->output->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'message' => 'Pembayaran gagal'
+                ]));
+        }
     }
 
     public function callback()
