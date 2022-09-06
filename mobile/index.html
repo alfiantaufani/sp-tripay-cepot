@@ -142,40 +142,40 @@
                     `;
 
                     detail_campign += `
-                    <div class="block-title">Pilih Pembayaran</div>
+                    
                         <div class="list accordion-list">
-                            <ul>`;
-                    $.each(data.methode, function (index, pay) {
-                        detail_campign += `
-                                    <li class="accordion-item"><a class="item-content item-link" href="#">
-                                        <div class="item-inner">
-                                            <div class="item-title">`+ pay.group_name + `</div>
-                                        </div>
-                                        </a>
-                                        <div class="accordion-item-content">
-                                            <div class="block">
-                                                <div class="row" style="margin-top:5px; margin-bottom:5px">`;
-                        $.each(pay.payment, function (index, payment) {
+                            <ul>
+                                <li class="accordion-item"><a class="item-content item-link" href="#">
+                                <div class="item-inner">
+                                    <div class="item-title">Pilih Metode Pembayaran</div>
+                                </div>
+                                </a>
+                                <div class="accordion-item-content">
+                                    <div class="block">
+                                        <div class="row" style="margin-top:5px; margin-bottom:5px">`;
+                    let channel = [];
+                    $.each(data.methode.data, function (index, pay) {
+                        // channel['group'][pay.group] = pay;
                             detail_campign += `
-                                                    <div class="option">
-                                                        <input type="radio" name="method_donasi" id="`+ payment.code + `" value="` + payment.code + `">
-                                                        <label for="`+ payment.code + `" aria-label="` + payment.code + `">
-                                                            <span></span>
-                                                            `+ payment.name + `
-                                                            <div class="">
-                                                                <small>Rp.`+ formatRupiah(payment.fee.flat) + `</small>
-                                                            </div>
-                                                        </label>
-                                                    </div>`;
-                        })
-                        detail_campign += `
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>`;
+                            <div class="option">
+                                <input type="radio" name="method_donasi" id="`+ pay.code + `" value="` + pay.code + `">
+                                <label for="`+ pay.code + `" aria-label="` + pay.code + `">
+                                    <span></span>
+                                    `+ pay.name + `
+                                    <div class="">
+                                        <small>Rp.`+ formatRupiah(pay.fee_merchant.flat) + `</small>
+                                    </div>
+                                </label>
+                            </div>`;
                     });
+                    console.log(channel)
 
-                    detail_campign += `    
+                        
+
+                    detail_campign += `</div>
+                                    </div>
+                                </div>
+                            </li>    
                                 </ul>
                             </div>
                         </div>

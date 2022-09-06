@@ -61,7 +61,7 @@
                     var selesai = "";
                     $.each(data.data, function (index, item) {
                         console.log(item)
-                        if (item.status == 'UNPAID' || item.status == 'REFUND' || item.status == 'EXPIRED' || item.status == 'FAILED') {
+                        if (item.status == 'UNPAID' || item.status == 'REFUND' || item.status == 'EXPIRED' || item.status == 'FAILED' || item.status == 'PENDING') {
                             status_proses += `
                             <li>
                                 <a href="#" data-code="`+item.pay_code+`" onclick="cek_out(this)" class="item-link item-content">
