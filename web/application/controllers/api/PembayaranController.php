@@ -119,8 +119,8 @@ class PembayaranController extends CI_Controller
 
         // $signature = $init->createSignature();
 
-        $init->setMethod('BRIVAOP');
-        // $init->setMethod($this->input->get('method'));
+        // $init->setMethod('BRIVAOP');
+        $init->setMethod($this->input->get('method'));
 
         $transaction = $init->openTransaction();
         $transaction->setPayload([
@@ -153,7 +153,7 @@ class PembayaranController extends CI_Controller
             'id_pembayaran' => $id_pembayaran,
             'deskripsi' => $this->input->get('nama'),
             'kode_campaign' => $this->input->get('kode'),
-            'nominal' => $this->input->get('nominal'),
+            // 'nominal' => $this->input->get('nominal'),
         ];
         $this->db->insert('detail_transaksi', $detail_transaksi);
 
