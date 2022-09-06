@@ -66,7 +66,9 @@ class CampignController extends CI_Controller
             CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
         ));
 
-        $methode = curl_exec($curl);
+        $response = curl_exec($curl);
+        $methode = json_decode($response);
+
         // $error = curl_error($curl);
 
         // curl_close($curl);
