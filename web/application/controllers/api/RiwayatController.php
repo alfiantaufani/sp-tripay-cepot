@@ -55,6 +55,7 @@ class RiwayatController extends CI_Controller
             CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
         ]);
         $response = curl_exec($curl);
+        $methode = json_decode($response);
         // $error = curl_error($curl);
         // curl_close($curl);
         // echo empty($error) ? $response : $error;
@@ -63,7 +64,7 @@ class RiwayatController extends CI_Controller
         echo json_encode([
             'status' => 'success',
             'data' => $hasil,
-            'tutorial' => $response,
+            'tutorial' => $methode,
         ]);
     }
 }
