@@ -43,7 +43,7 @@ class RiwayatController extends CI_Controller
 
         // cari tutorial di tripay
         $apiKey = 'xvYjCuHif6GP6J7OTUqrQXgs4xd7kTfMTPXippgO';
-        $payload = ['code' => $hasil->payment_name];
+        $payload = ['code' => $hasil->payment_method];
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_FRESH_CONNECT  => true,
