@@ -56,16 +56,12 @@ class RiwayatController extends CI_Controller
         ]);
         $response = curl_exec($curl);
         $methode = json_decode($response);
-        // $error = curl_error($curl);
-        // curl_close($curl);
-        // echo empty($error) ? $response : $error;
 
         header('Content-Type: application/json');
         echo json_encode([
             'status' => 'success',
             'data' => $hasil,
             'tutorial' => $methode,
-            'payload' => $payload,
         ]);
     }
 }
