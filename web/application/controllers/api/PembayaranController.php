@@ -195,8 +195,8 @@ class PembayaranController extends CI_Controller
             $this->db->where('merchant_ref', $result->merchant_ref);
             $this->db->update('transaksi', ['status' => $status_bayar]);
 
-            $this->db->where('id_pembayaran', $transaksi->id);
-            $this->db->update('detail_transaksi', ['nominal' => $result->total_amount]);
+            // $this->db->where('id_pembayaran', $transaksi->id);
+            $this->db->update('detail_transaksi', ['nominal' => $result->total_amount], ['id_pembayaran' => $transaksi->id]);
             if ($this->db->error()) {
                 return $this->output->set_content_type('application/json')
                 ->set_status_header(500)
