@@ -65,6 +65,7 @@ class RiwayatController extends CI_Controller
             'status' => 'success',
             'data' => $hasil,
             'tutorial' => $methode,
+            'payload' => $payload,
         ]);
     }
 }
