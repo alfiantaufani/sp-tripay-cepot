@@ -185,12 +185,13 @@ class PembayaranController extends CI_Controller
                     'message' => 'Akses dilarang'
                 ]));
         }
-        
+
         $init = $this->tripay->initCallback();
         $result = $init->getJson();
 
         $cek_pembayaran = $this->db->get_where('transaksi', ['merchant_ref' => $result->merchant_ref]);
         if ($cek_pembayaran->num_rows() > 0) {
+            $transaksi = $cek_pembayaran->row();
             if ($result->status == "PAID") {
                 $status_bayar = "PAID";
             } else {
@@ -201,6 +202,9 @@ class PembayaranController extends CI_Controller
             $this->db->update('transaksi', ['status' => $status_bayar]);
 
             if ($this->db->error()) {
+                $this->db->where('id_pembayaran', $transaksi->id);
+                $this->db->update('detail_transaksi', ['nominal' => $result->amount_received]);
+
                 return $this->output->set_content_type('application/json')
                     ->set_status_header(500)
                     ->set_output(json_encode([
