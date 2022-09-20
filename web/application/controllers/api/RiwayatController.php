@@ -36,7 +36,7 @@ class RiwayatController extends CI_Controller
         $this->db->select('*');
         $this->db->from('transaksi');
         $this->db->join('detail_transaksi', 'transaksi.id=detail_transaksi.id_pembayaran');
-        $this->db->where('transaksi.id', $id);
+        $this->db->where('transaksi.uuid', $id);
         $data = $this->db->get();
 
         header('Content-Type: application/json');
