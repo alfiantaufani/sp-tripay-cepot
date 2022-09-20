@@ -156,7 +156,7 @@
                     let channel = [];
                     $.each(data.methode.data, function (index, pay) {
                         // channel['group'][pay.group] = pay;
-                            detail_campign += `
+                        detail_campign += `
                             <div class="option">
                                 <input type="radio" name="method_donasi" id="`+ pay.code + `" value="` + pay.code + `">
                                 <label for="`+ pay.code + `" aria-label="` + pay.code + `">
@@ -168,9 +168,8 @@
                                 </label>
                             </div>`;
                     });
-                    console.log(channel)
 
-                        
+
 
                     detail_campign += `</div>
                                     </div>
@@ -258,8 +257,97 @@
             });
         }
 
+
         function cek_out(el) {
-            app.dialog.alert("Kode pembayaran : " + $(el).data('code'), "Informasi");
+            app.views.main.router.navigate("/detail-pembayaran/");
+            $.getJSON(url + "api/riwayat-pembayaran/detail", { id: $(el).data('id') }, function (data) {
+                var html = "";
+                html += `
+                <div class="text-center">
+                    <h2>Pembayaran Dengan `+data.data.payment_name+`</h2>
+                </div>
+                <div class="list media-list">
+                    <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-text">No. Invoice</div>
+                                    <div class="item-subtitle">`+data.data.merchant_ref+`</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-text">Nama Pelanggan</div>
+                                    <div class="item-subtitle">`+data.data.customer_name+`</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-text">Kode Bayar/Nomor VA</div>
+                                    <div class="item-subtitle">`+data.data.pay_code+`</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-text">Pembayaran Via</div>
+                                    <div class="item-subtitle">`+data.data.payment_name+`</div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="list accordion-list">
+                    <ul>
+                        <li class="accordion-item"><a class="item-content item-link" href="#">
+                            <div class="item-inner">
+                                <div class="item-title">Cara Pembayaran</div>
+                            </div>
+                            </a>
+                            <div class="accordion-item-content">
+                                <div class="block">
+                                    <div class="row" style="margin-top:5px; margin-bottom:5px">`;
+
+                                        $.each(data.tutorial.data, function (index, tutor) {
+                                            html += `
+                                                <div class="item-subtitle">Pembayaran Via</div>
+                                                <div class="item-subtitle"><b>`+tutor.title+`</b></div>
+                                                <div class="list media-list" style="margin-top: 10px;">
+                                                    <ul>
+                                            `;
+                                            $.each(tutor.steps, function (index, steps) {
+                                                html += `
+                                                        <li>
+                                                            <div class="">
+                                                                <div class="item-inner">
+                                                                    <div class="item-text">`+steps+`</div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                `;
+                                            })
+                                        });
+
+                                html += `
+                                        </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>    
+                    </ul>
+                </div>
+                `;
+                $('#as').html(html);
+            });
+
+
         }
     </script>
 </body>

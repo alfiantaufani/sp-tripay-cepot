@@ -60,11 +60,10 @@
                     let status_proses = "";
                     var selesai = "";
                     $.each(data.data, function (index, item) {
-                        console.log(item)
                         if (item.status == 'UNPAID' || item.status == 'REFUND' || item.status == 'EXPIRED' || item.status == 'FAILED' || item.status == 'PENDING') {
                             status_proses += `
                             <li>
-                                <a href="#" data-code="`+item.pay_code+`" onclick="cek_out(this)" class="item-link item-content">
+                                <a href="#" data-id="`+item.uuid+`" onclick="cek_out(this)" class="item-link item-content">
                                     <div class="item-inner">
                                         <div class="item-title">
                                             `+ item.deskripsi + ` - Rp.` + formatRupiah(item.nominal) + `

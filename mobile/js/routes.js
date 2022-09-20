@@ -5,5 +5,6 @@ var routes = [
   {path: '/tagihan/', componentUrl: 'pages/tagihan.html'},
   {path: '/keranjang/', componentUrl: 'pages/keranjang.html'},
   {path: '/riwayat/', componentUrl: 'pages/riwayat.html'},
+  {path: '/detail-pembayaran/', componentUrl: 'pages/detail-pembayaran.html'},
   // {path: '(.*)', url: 'pages/404.html',}
  ]
