@@ -271,7 +271,15 @@
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-text">No. Invoice</div>
+                                    <div class="item-text">No. Reference (reference)</div>
+                                    <div class="item-subtitle">`+data.data.uuid+`</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-text">No. Invoice (Merchent Ref)</div>
                                     <div class="item-subtitle">`+data.data.merchant_ref+`</div>
                                 </div>
                             </div>
@@ -287,7 +295,7 @@
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-text">Kode Bayar/Nomor VA</div>
+                                    <div class="item-text">Kode Bayar/Nomor VA (pay_code)</div>
                                     <div class="item-subtitle">`+data.data.pay_code+`</div>
                                 </div>
                             </div>
@@ -295,8 +303,16 @@
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-text">Pembayaran Via</div>
+                                    <div class="item-text">Pembayaran Via (payment_method)</div>
                                     <div class="item-subtitle">`+data.data.payment_name+`</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-text">Payment Method (payment_method_code)</div>
+                                    <div class="item-subtitle">`+data.data.payment_method+`</div>
                                 </div>
                             </div>
                         </li>
