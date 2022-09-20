@@ -117,9 +117,6 @@ class PembayaranController extends CI_Controller
         $merchantRef = 'DONASI-CEPOT-' . (int)preg_replace('/(0)\.(\d+) (\d+)/', '$3$1$2', microtime());
         $init = $this->tripay->initTransaction($merchantRef);
 
-        // $signature = $init->createSignature();
-
-        // $init->setMethod('BRIVAOP');
         $init->setMethod($this->input->get('method'));
 
         $transaction = $init->openTransaction();
@@ -130,9 +127,6 @@ class PembayaranController extends CI_Controller
             'signature'         => $init->createSignature()
         ]);
 
-        // return $this->output->set_content_type('application/json')
-        //     ->set_status_header(200)
-        //     ->set_output(json_encode($transaction->getData()));
         $result = $transaction->getData();
 
         $transaksi = [
@@ -153,12 +147,11 @@ class PembayaranController extends CI_Controller
             'id_pembayaran' => $id_pembayaran,
             'deskripsi' => $this->input->get('nama'),
             'kode_campaign' => $this->input->get('kode'),
-            // 'nominal' => $this->input->get('nominal'),
         ];
         $this->db->insert('detail_transaksi', $detail_transaksi);
 
         if ($insert) {
-            $this->db->delete('keranjang', array('id' => $this->input->get('idkeranjang')));
+            // $this->db->delete('keranjang', array('id' => $this->input->get('idkeranjang')));
             return $this->output->set_content_type('application/json')
                 ->set_status_header(200)
                 ->set_output(json_encode([
@@ -177,14 +170,14 @@ class PembayaranController extends CI_Controller
 
     public function callback()
     {
-        if ($this->input->get_request_header('X-Callback-Event') != "payment_status") {
-            return $this->output->set_content_type('application/json')
-                ->set_status_header(500)
-                ->set_output(json_encode([
-                    'status' => 'error',
-                    'message' => 'Akses dilarang'
-                ]));
-        }
+        // if ($this->input->get_request_header('X-Callback-Event') != "payment_status") {
+        //     return $this->output->set_content_type('application/json')
+        //         ->set_status_header(500)
+        //         ->set_output(json_encode([
+        //             'status' => 'error',
+        //             'message' => 'Akses dilarang'
+        //         ]));
+        // }
 
         $init = $this->tripay->initCallback();
         $result = $init->getJson();
@@ -201,6 +194,8 @@ class PembayaranController extends CI_Controller
             $this->db->where('merchant_ref', $result->merchant_ref);
             $this->db->update('transaksi', ['status' => $status_bayar]);
 
+            $this->db->where('id_pembayaran', $transaksi->id);
+            $this->db->update('detail_transaksi', ['nominal' => $result->amount_received]);
             if ($this->db->error()) {
                 return $this->output->set_content_type('application/json')
                 ->set_status_header(500)
@@ -209,8 +204,6 @@ class PembayaranController extends CI_Controller
                     'message' => 'Pembayaran gagal'
                 ]));
             } else {
-                $this->db->where('id_pembayaran', $transaksi->id);
-                $this->db->update('detail_transaksi', ['nominal' => $result->amount_received]);
                 return $this->output->set_content_type('application/json')
                     ->set_status_header(200)
                     ->set_output(json_encode([
