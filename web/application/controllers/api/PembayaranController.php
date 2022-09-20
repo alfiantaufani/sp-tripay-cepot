@@ -202,16 +202,15 @@ class PembayaranController extends CI_Controller
             $this->db->update('transaksi', ['status' => $status_bayar]);
 
             if ($this->db->error()) {
+                return $this->output->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode([
+                    'status' => 'error',
+                    'message' => 'Pembayaran gagal'
+                ]));
+            } else {
                 $this->db->where('id_pembayaran', $transaksi->id);
                 $this->db->update('detail_transaksi', ['nominal' => $result->amount_received]);
-
-                return $this->output->set_content_type('application/json')
-                    ->set_status_header(500)
-                    ->set_output(json_encode([
-                        'status' => 'error',
-                        'message' => 'Pembayaran gagal'
-                    ]));
-            } else {
                 return $this->output->set_content_type('application/json')
                     ->set_status_header(200)
                     ->set_output(json_encode([
