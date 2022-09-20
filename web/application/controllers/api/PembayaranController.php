@@ -183,6 +183,7 @@ class PembayaranController extends CI_Controller
         $result = $init->getJson();
 
         $cek_pembayaran = $this->db->get_where('transaksi', ['merchant_ref' => $result->merchant_ref]);
+        // $cek_pembayaran = $this->db->get_where('transaksi', ['merchant_ref' => 'DONASI-CEPOT-1663651759056696800']);
         if ($cek_pembayaran->num_rows() > 0) {
             $transaksi = $cek_pembayaran->row();
             if ($result->status == "PAID") {
@@ -195,7 +196,7 @@ class PembayaranController extends CI_Controller
             $this->db->update('transaksi', ['status' => $status_bayar]);
 
             $this->db->where('id_pembayaran', $transaksi->id);
-            $this->db->update('detail_transaksi', ['nominal' => $result->amount_received]);
+            $this->db->update('detail_transaksi', ['nominal' => $result->total_amount]);
             if ($this->db->error()) {
                 return $this->output->set_content_type('application/json')
                 ->set_status_header(500)
