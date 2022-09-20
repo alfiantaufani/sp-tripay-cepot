@@ -29,4 +29,20 @@ class RiwayatController extends CI_Controller
             'data' => $data->result(),
         ]);
     }
+
+    public function detail()
+    {
+        $id = $this->input->get('id');
+        $this->db->select('*');
+        $this->db->from('transaksi');
+        $this->db->join('detail_transaksi', 'transaksi.id=detail_transaksi.id_pembayaran');
+        $this->db->where('transaksi.id', $id);
+        $data = $this->db->get();
+
+        header('Content-Type: application/json');
+        echo json_encode([
+            'status' => 'success',
+            'data' => $data->row(),
+        ]);
+    }
 }
